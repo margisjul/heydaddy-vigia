@@ -1,0 +1,49 @@
+# Vigilante externo de HeyDaddy: va en .github/workflows/ del repositorio PÚBLICO margisjul/heydaddy-vigia
+# (los repositorios públicos no gastan minutos de GitHub Actions). Código fuente: heydaddy, deploy/vigia_externo/,
+# donde se mantiene; aquí solo se copia.
+name: Vigía HeyDaddy
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write  # solo para el latido mensual que evita que GitHub apague el cron por inactividad
+
+concurrency:
+  group: vigia
+  cancel-in-progress: false
+
+jobs:
+  vigia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar el estado de la pasada anterior
+        uses: actions/cache/restore@v4
+        with:
+          path: estado.json
+          key: vigia-estado-${{ github.run_id }}
+          restore-keys: vigia-estado-
+      - name: Comprobar web y API
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: python3 vigia.py estado.json
+      - name: Guardar el estado
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: estado.json
+          key: vigia-estado-${{ github.run_id }}
+      - name: Latido mensual (GitHub apaga los cron de repos sin actividad en 60 días)
+        run: |
+          if [ "$(date -u +%d%H%M | cut -c1-4)" = "0100" ] || [ ! -f latido.txt ]; then
+            date -u +%Y-%m-%dT%H:%MZ > latido.txt
+            git config user.name "heydaddy-vigia"; git config user.email "vigia@users.noreply.github.com"
+            git add latido.txt && git commit -m "Latido del vigía" && git push || true
+          fi
