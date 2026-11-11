@@ -1,7 +1,7 @@
-# Vigilante externo de HeyDaddy: va en .github/workflows/ del repositorio PÚBLICO margisjul/heydaddy-vigia
-# (los repositorios públicos no gastan minutos de GitHub Actions). Código fuente: heydaddy, deploy/vigia_externo/,
-# donde se mantiene; aquí solo se copia.
-name: Vigía HeyDaddy
+# Vigilante externo de HeyDaddy y de Originl (F-011, 10-nov-2026): va en .github/workflows/ del repositorio PÚBLICO margisjul/heydaddy-vigia
+# (los repositorios públicos no gastan minutos de GitHub Actions). Ver deploy/vigia_externo/LEEME en el
+# informe de Z30 para los secretos.
+name: Vigía HeyDaddy y Originl
 
 on:
   schedule:
@@ -27,12 +27,14 @@ jobs:
           path: estado.json
           key: vigia-estado-${{ github.run_id }}
           restore-keys: vigia-estado-
-      - name: Comprobar web y API
+      - name: Comprobar web y API (HeyDaddy y Originl) y el editor de Originl
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          # Dirección pública del editor de Originl (servicio del motor en Railway); sin ella no se vigila el editor.
+          ORIGINL_EDITOR_URL: ${{ vars.ORIGINL_EDITOR_URL }}
         run: python3 vigia.py estado.json
       - name: Guardar el estado
         if: always()
