@@ -93,6 +93,10 @@ PRODUCTOS = [
          "url": "https://cimiento.trysettr.com/entrar", "aguja": "cimiento",
          "afecta": "Los negocios no pueden entrar y el agente de WhatsApp puede dejar de atender.",
          "hacer": "Mira el servicio web y el worker del agente de WhatsApp en Railway."},
+        {"id": "cimiento_landing", "nombre": "la web pública (cimiento.app)",
+         "url": "https://cimiento.app/", "aguja": "Cimiento",
+         "afecta": "Los negocios que buscan Cimiento no pueden ver la web ni darse de alta.",
+         "hacer": "Mira el despliegue de la web de Cimiento y su dominio."},
     ]},
     {"nombre": "Marca Personal", "checks": [
         {"id": "marca_web", "nombre": "el panel (marca-personal-production.up.railway.app)",
