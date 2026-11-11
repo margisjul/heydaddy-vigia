@@ -1,2 +1,28 @@
-Vigilante externo de HeyDaddy: cada 5 minutos comprueba la web y la API desde fuera de Railway y avisa por Telegram y correo con "HeyDaddy" delante.
-Secretos: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, RESEND_API_KEY, ALERT_EMAIL (opcional).
+VIGILANTE EXTERNO DE LOS PRODUCTOS DE JULIAN
+
+Que hace: cada 5 minutos, desde fuera de Railway y Vercel (en GitHub Actions), comprueba que responden las webs y
+las API de HeyDaddy, Originl, FirstStone, Settr, Cimiento, Marca Personal y Emprendedores Paraguay. Si algo cae,
+avisa por correo (y por Telegram, si esta configurado) con el nombre del producto delante, desde cuando, que afecta
+y que hacer. Cuando vuelve, avisa con cuanto duro.
+
+Cuando avisa: solo si una comprobacion falla en 2 pasadas seguidas (cada pasada ya hace 2 intentos), asi un reinicio
+de un minuto no despierta a nadie. Un aviso por caida, un recordatorio cada 30 minutos mientras siga caido, y un
+aviso de vuelta. Una vez al mes escribe un latido (latido.txt) para que GitHub no apague el cron por inactividad.
+
+Secretos del repositorio (Settings > Secrets and variables > Actions):
+  RESEND_API_KEY      OBLIGATORIO para recibir correos (clave de Resend, solo envio).
+  ALERT_EMAIL         opcional, por defecto julian@ghgroup.es
+  EMAIL_FROM          opcional, por defecto "Vigilante <avisos@getoriginl.com>" (dominio verificado en Resend)
+  TELEGRAM_BOT_TOKEN  opcional. Sin el, solo correo.
+  TELEGRAM_CHAT_ID    opcional. Sin el, solo correo.
+  ORIGINL_EDITOR_URL  opcional (secreto o variable): direccion publica del editor de Originl. Sin ella, el editor
+                      no se vigila y todo lo demas sigue igual.
+
+Activarlo: mover pendiente/vigia.yml a .github/workflows/vigia.yml (requiere un token con permiso de workflows).
+
+Anadir un producto: en vigia.py, una entrada nueva en la lista PRODUCTOS (nombre, y por cada comprobacion: id unico,
+nombre visible, direccion, texto que debe aparecer, que afecta y que hacer). Nada mas.
+
+Probar sin enviar nada:
+  python3 -m unittest -v          pruebas (sin red, sin envios)
+  python3 vigia.py --sin-avisos   comprobacion real, enseña la tabla; no avisa ni guarda estado
