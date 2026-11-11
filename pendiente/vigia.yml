@@ -30,10 +30,10 @@ jobs:
           restore-keys: vigia-estado-
       - name: Comprobar todos los productos
         env:
-          # Obligatorio para recibir correos (los demás secretos tienen valor por defecto o son opcionales).
           # Telegram es opcional: sin estos dos secretos solo se manda correo.
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Obligatorio para recibir correos; el resto tiene valor por defecto o es opcional.
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}

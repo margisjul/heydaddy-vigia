@@ -261,10 +261,10 @@ def pasada(checks: list[dict]) -> dict[str, tuple[bool, str]]:
 
 
 def tabla(checks: list[dict], resultados: dict[str, tuple[bool, str]]) -> str:
-    filas = [f"{'Producto':<24}{'Comprobación':<52}{'Resultado':<8}Detalle"]
+    filas = [f"{'Producto':<24}{'Comprobación':<52}{'Resultado':<10}Detalle"]
     for c in checks:
         ok, det = resultados[c["id"]]
-        filas.append(f"{c['producto']:<24}{c['nombre'][:50]:<52}{'OK' if ok else 'FALLA':<8}{det}  {c['url']}")
+        filas.append(f"{c['producto']:<24}{c['nombre'][:50]:<52}{'OK' if ok else 'FALLA':<10}{det}  {c['url']}")
     return "\n".join(filas)
 
 
