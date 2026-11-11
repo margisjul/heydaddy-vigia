@@ -219,7 +219,9 @@ def decidir(estado: dict, resultados: dict[str, tuple[bool, str]], ahora: float,
 
 def _post_json(url: str, datos: dict, cabeceras: dict) -> int:
     req = urllib.request.Request(url, data=json.dumps(datos).encode(), method="POST",
-                                 headers={"Content-Type": "application/json", **cabeceras})
+                                 headers={"Content-Type": "application/json",
+                                          # Resend rechaza con 403 el agente por defecto de urllib.
+                                          "User-Agent": "vigilante-externo/1.0", **cabeceras})
     try:
         with urllib.request.urlopen(req, timeout=15) as r:  # noqa: S310
             return r.status
