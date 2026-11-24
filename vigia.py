@@ -44,6 +44,12 @@ PRODUCTOS = [
          "aguja": "heydaddy",
          "afecta": "Los clientes no pueden entrar en su panel.",
          "hacer": "Mira el servicio web de HeyDaddy en Railway."},
+        {"id": "canales", "nombre": "la página de canales (www.heydaddy.app/canales)",
+         "url": "https://www.heydaddy.app/canales", "aguja": "lc-hero",
+         "afecta": "La página de canales no se ve. Si la web sí responde, lo más probable es que un despliegue haya "
+                   "subido una versión antigua y haya pisado lo publicado después.",
+         "hacer": "Mira qué se desplegó último en el servicio web de HeyDaddy en Railway y vuelve a desplegar la "
+                  "rama produccion."},
         {"id": "api", "nombre": "la API (servidor)", "url": "https://api.heydaddy.app/health",
          "aguja": '"status":"ok"',
          "afecta": "Los chats con fans, los cobros y el panel pueden dejar de funcionar.",
